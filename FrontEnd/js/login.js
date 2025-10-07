@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Auto-completar campos si vienen por query string
+    // Auto-completar campos si vienen por query
     const urlParams = new URLSearchParams(window.location.search);
     const emailField = document.getElementById('email');
     const contrasenaField = document.getElementById('contraseña');

@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressFill = document.getElementById('progressFill');
 
 
+    
     checkLockout();
 
     function checkLockout() {
