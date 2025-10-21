@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoFuga | Sistema de Detección de Fugas y Tickets</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="EcoFuga: Reporta y gestiona fugas de agua con un sistema de tickets, panel de seguimiento y roles para clientes, administradores y técnicos.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0aa4ff">
+<!-- Favicon para navegadores -->
+<link rel="icon" href="icons/icon-72.png" type="image/png">
+
+</head>
+<body>
+  <!-- Encabezado -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <!-- ========= LÍNEA PARA CAMBIAR SOLO LA RUTA DEL LOGO ========= -->
+        <img class="logo" src="logotipo.jpg" alt="Logo EcoFuga" />
+        <!-- ^ Cambia ÚNICAMENTE el valor de src para actualizar la imagen -->
+        <span class="brand">EcoFuga</span>
+      </div>
+
+      <nav class="header-actions" aria-label="Acciones principales">
+        <a class="btn btn-primary" href="auth.html">Ingresar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO con logo grande en contenedor -->
+    <section class="container hero" id="inicio">
+      <div class="hero-grid">
+        <div class="hero-media">
+          <div class="hero-logo-card card">
+            <!-- Si deseas, puedes usar la MISMA imagen del header aquí también -->
+            <img class="hero-logo" src="logotipo.jpg" alt="Logo EcoFuga">
+            <p class="hero-logo-caption">EcoFuga</p>
+          </div>
+        </div>
+
+        <div class="hero-copy">
+          <h1>Detección y gestión de fugas con <span class="grad">tickets inteligentes</span></h1>
+          <p class="lead">
+            EcoFuga centraliza el <strong>reporte de fugas</strong> y su <strong>seguimiento</strong> mediante un
+            sistema de tickets que prioriza incidencias, asigna técnicos y acelera la atención.
+          </p>
+          <!-- Se retiraron los botones del hero para evitar duplicados -->
+          <ul class="hero-badges">
+            <li class="badge">Tickets por prioridad</li>
+            <li class="badge">Alertas en tiempo real</li>
+            <li class="badge">Panel administrativo</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUÉ OFRECE -->
+    <section class="container" id="ofrece" aria-labelledby="ofrece-title">
+      <h2 id="ofrece-title">Qué ofrece EcoFuga</h2>
+      <div class="grid-3">
+        <article class="card">
+          <h3>🎫 Sistema de tickets</h3>
+          <p>Registra fugas con evidencia, <strong>asigna prioridad</strong> (Alta/Media/Baja), SLA y responsable. Cada ticket conserva historial y estados.</p>
+        </article>
+        <article class="card">
+          <h3>🔍 Detección y reporte</h3>
+          <p>Combina <strong>reporte ciudadano</strong> con sensores. Crea alertas automáticas ante patrones anómalos de consumo.</p>
+        </article>
+        <article class="card">
+          <h3>📊 Seguimiento y métricas</h3>
+          <p>Visualiza tiempos de atención, tickets por zona, técnicos activos y <strong>cumplimiento de SLA</strong> desde un panel claro.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA (con botón "Ver qué ofrecemos" a un costado) -->
+    <section class="container" id="como-funciona" aria-labelledby="como-title">
+      <div class="section-head">
+        <h2 id="como-title">Cómo funciona</h2>
+      </div>
+
+      <div class="steps">
+        <div class="step card">
+          <span class="step-num">1</span>
+          <h4>Reporta o detecta</h4>
+          <p>El usuario reporta la fuga (web/móvil) o un sensor la detecta automáticamente.</p>
+        </div>
+        <div class="step card">
+          <span class="step-num">2</span>
+          <h4>Se crea el ticket</h4>
+          <p>Se asigna prioridad, técnico y tiempo objetivo (SLA). Se notifica por correo o dentro del sistema.</p>
+        </div>
+        <div class="step card">
+          <span class="step-num">3</span>
+          <h4>Atiende y cierra</h4>
+          <p>El técnico actualiza el avance con evidencias. El administrador monitorea métricas y calidad del servicio.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROLES -->
+    <section class="container" id="roles" aria-labelledby="roles-title">
+      <h2 id="roles-title">Roles del sistema</h2>
+      <div class="grid-3">
+        <article class="card">
+          <h3>👤 Cliente</h3>
+          <p>Reporta fugas, consulta el estado de sus tickets y recibe notificaciones de avance y cierre.</p>
+        </article>
+        <article class="card">
+          <h3>🛠️ Mantenimiento</h3>
+          <p>Recibe tickets asignados, planifica visitas, documenta reparaciones y cierra incidencias.</p>
+        </article>
+        <article class="card">
+          <h3>🗂️ Administrador</h3>
+          <p>Configura prioridades, gestiona equipos y supervisa indicadores clave del servicio.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- CTA final (sin botón para evitar duplicados) -->
+    <section class="container cta" aria-labelledby="cta-title">
+      <h2 id="cta-title">¿Listo para gestionar fugas con eficiencia?</h2>
+      <p>Accede al sistema desde el botón “Ingresar” en el encabezado.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© <span id="y"></span> EcoFuga — Sistema de detección y tickets de fugas de agua.</p>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('./sw.js', { scope: './' });
+      console.log("✅ Service Worker registrado correctamente:", reg.scope);
+
+      // Mostrar aviso si hay nueva versión
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        nw?.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            const banner = document.createElement('div');
+            banner.style.cssText =
+              "position:fixed;left:16px;right:16px;bottom:16px;padding:12px;border-radius:12px;background:#0aa4ff;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:9999;box-shadow:0 10px 20px rgba(0,0,0,.2)";
+            banner.innerHTML = "<span>Hay una actualización disponible.</span>";
+            const btn = document.createElement('button');
+            btn.textContent = "Actualizar";
+            btn.style.cssText =
+              "background:#00b894;color:#fff;border:none;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer";
+            btn.onclick = () => nw.postMessage({ type: 'SKIP_WAITING' });
+            banner.appendChild(btn);
+            document.body.appendChild(banner);
+            navigator.serviceWorker.addEventListener('controllerchange', () =>
+              location.reload()
+            );
+          }
+        });
+      });
+    } catch (err) {
+      console.error("❌ Error al registrar el Service Worker:", err);
+    }
+  });
+}
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoFugas - Bienvenido</title>
+  <link rel="stylesheet" href="bienvenido.css">
+  <link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0aa4ff">
+<!-- Favicon para navegadores -->
+<link rel="icon" href="icons/icon-72.png" type="image/png">
+
+</head>
+<body>
+  <div id="offline-banner" 
+     style="display:none;position:fixed;top:0;left:0;width:100%;padding:10px;text-align:center;background:#ff6b6b;color:#fff;font-weight:bold;z-index:9999;">
+  ⚠️ Sin conexión — Estás trabajando en modo offline
+</div>
+
+  <header>
+    <!-- Izquierda: logo + título -->
+    <div class="brand">
+      <img src="logotipo.jpg" alt="Logo" style=" margin-left: 18px; width:100px; height:100px; border:1px; border-radius: 50%;" />
+      <h1 class="site-title">EcoFugas</h1>
+    </div>
+
+    <!-- Derecha: usuario + cerrar sesión -->
+    <div class="user-info">
+      <span id="username">Usuario</span>
+      <button id="logout">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar">
+      <button id="new-task-btn">➕ Nueva Tarea</button>
+
+      <div class="filters">
+        <h3>Filtros</h3>
+        <select id="filter-user">
+          <option value="">Todos los usuarios</option>
+        </select>
+        <select id="filter-status">
+          <option value="">Todos los estados</option>
+          <option value="pendiente">Pendiente</option>
+          <option value="en-progreso">En progreso</option>
+          <option value="completada">Completada</option>
+        </select>
+        <button id="apply-filters">Aplicar Filtros</button>  
+      </div>
+    </aside>
+    <main class="task-list">
+      <h2>Mis Tareas</h2>
+      <div id="tasks-container">
+        <!-- Tareas se cargarán aquí -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal para tareas -->
+  <div id="task-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modal-title">Editar Tarea</h2>
+      <form id="task-form">
+        <input type="hidden" id="task-id" />
+        <div class="form-group">
+          <label for="title">Título*</label>
+          <input type="text" id="title" required readonly />
+        </div>
+        <div class="form-group">
+          <label for="description">Descripción</label>
+          <textarea id="description" rows="3" readonly></textarea>
+        </div>
+        <div class="form-group">
+          <label for="assigned-to">Asignar a*</label>
+          <select id="assigned-to" required disabled></select>
+        </div>
+        <div class="form-group">
+          <label for="due-date">Fecha límite</label>
+          <input type="date" id="due-date" readonly />
+        </div>
+        <div class="form-group">
+          <label for="status">Estado</label>
+          <select id="status">
+            <option value="pendiente">Pendiente</option>
+            <option value="en-progreso">En progreso</option>
+            <option value="completada">Completada</option>
+          </select>
+        </div>
+        <button type="submit" class="save-btn">Guardar Cambios</button>
+        <button type="button" id="delete-task" class="delete-btn">Eliminar Tarea</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Librerías para PDF -->
+
+
+  <!-- Tu lógica (si la usas) -->
+  <!-- Si en tu proyecto usas backend/db.js y app.js, deja estas líneas.
+       Si no los tienes, puedes quitarlas sin problema. -->
+  <script src="../backend/db.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Opcional: detectar sesión guardada y mostrar nombre/permitir logout.
+       Úsalo si tu auth.html guarda algo como:
+       localStorage.setItem('ecofuga_session', JSON.stringify({ logged:true, username:'Yamilet' }))
+  -->
+  <script>
+    (function () {
+      try {
+        var s = JSON.parse(localStorage.getItem('ecofuga_session') || 'null');
+        var userEl = document.getElementById('username');
+        var logoutBtn = document.getElementById('logout');
+
+        if (s && s.logged && s.username) {
+          userEl.textContent = s.username;
+        }
+
+        if (logoutBtn) {
+          logoutBtn.addEventListener('click', function () {
+            localStorage.setItem('ecofuga_session', JSON.stringify({ logged: false, username: null }));
+            // Opcional: mandar al login
+            window.location.href = 'auth.html';
+          });
+        }
+      } catch (e) {}
+    })();
+  </script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('./sw.js', { scope: './' });
+      console.log("✅ Service Worker registrado correctamente:", reg.scope);
+
+      // Mostrar aviso si hay nueva versión
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        nw?.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            const banner = document.createElement('div');
+            banner.style.cssText =
+              "position:fixed;left:16px;right:16px;bottom:16px;padding:12px;border-radius:12px;background:#0aa4ff;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:9999;box-shadow:0 10px 20px rgba(0,0,0,.2)";
+            banner.innerHTML = "<span>Hay una actualización disponible.</span>";
+            const btn = document.createElement('button');
+            btn.textContent = "Actualizar";
+            btn.style.cssText =
+              "background:#00b894;color:#fff;border:none;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer";
+            btn.onclick = () => nw.postMessage({ type: 'SKIP_WAITING' });
+            banner.appendChild(btn);
+            document.body.appendChild(banner);
+            navigator.serviceWorker.addEventListener('controllerchange', () =>
+              location.reload()
+            );
+          }
+        });
+      });
+    } catch (err) {
+      console.error("❌ Error al registrar el Service Worker:", err);
+    }
+  });
+}
+</script>
+
+<script>
+// Detectar estado de conexión
+function updateConnectionStatus() {
+  const banner = document.getElementById('offline-banner');
+  if (navigator.onLine) {
+    banner.style.display = 'none';
+  } else {
+    banner.style.display = 'block';
+  }
+}
+
+// Escucha eventos
+window.addEventListener('online', updateConnectionStatus);
+window.addEventListener('offline', updateConnectionStatus);
+
+// Inicializar al cargar
+updateConnectionStatus();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Ignorar credenciales y binarios
+BackEnd/firebase-credentials.json
+BackEnd/bin/
+BackEnd/obj/
+*.json
