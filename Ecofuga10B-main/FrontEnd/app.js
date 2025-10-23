@@ -177,12 +177,6 @@
       }
     });
 
-    // Exportar PDF (si el botón y las libs existen)
-    if (exportPdfBtn && window.jspdf && window.jspdf.jsPDF) {
-      exportPdfBtn.addEventListener('click', exportTasksToPDF);
-    } else {
-      // Si no quieres PDF, puedes eliminar el botón del HTML y esto no hará nada
-    }
 
     // ==== Funciones ====
 
@@ -254,7 +248,6 @@
       taskForm.reset();
       fStatus.value = 'pendiente';
 
-      // Permisos: admin edita todo; usuario no admin solo puede estatus (pero no ve botón "Nueva")
       setFormReadOnly(!admin);
 
       deleteTaskBtn.style.display = admin ? 'inline-block' : 'none';
@@ -275,7 +268,7 @@
       fDue.value = t.dueDate || '';
       fStatus.value = t.status;
 
-      // Admin edita todo; usuario solo estado (coincide con tu bienvenido.html)
+      
       setFormReadOnly(!admin);
       deleteTaskBtn.style.display = admin ? 'inline-block' : 'none';
 

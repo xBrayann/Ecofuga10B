@@ -1,9 +1,8 @@
-/* sw.js — EcoFuga (versión estable sin errores) */
-const VERSION = "v1.0.2";
+
+const VERSION = "v1.0.4";
 const STATIC_CACHE = `ecofuga-static-${VERSION}`;
 const RUNTIME_CACHE = `ecofuga-runtime-${VERSION}`;
 
-// Lista de archivos que se cachean para funcionar offline
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -11,6 +10,8 @@ const APP_SHELL = [
   "./bienvenido.html",
   "./offline.html",
   "./styles.css",
+  "./shell.css",   
+  "./shell.js",    
   "./manifest.webmanifest",
   "./icons/icon-72.png",
   "./icons/icon-96.png",
@@ -21,7 +22,8 @@ const APP_SHELL = [
   "./icons/icon-512.png"
 ];
 
-// Instalar y guardar recursos (sin romper si alguno falta)
+
+// Instalar y guardar recursos 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     (async () => {
@@ -31,12 +33,12 @@ self.addEventListener("install", (event) => {
           const response = await fetch(file, { cache: "no-store" });
           if (response.ok) {
             await cache.put(file, response.clone());
-            console.log("[SW] Cacheado:", file);
+            // console.log("[SW] Cacheado:", file);
           } else {
             console.warn("[SW] Archivo no encontrado (omitido):", file);
           }
         } catch (err) {
-          console.warn("[SW] No se pudo cachear:", file);
+          console.warn("[SW] No se pudo cachear (omitido):", file);
         }
       }
       await self.skipWaiting();
@@ -52,13 +54,12 @@ self.addEventListener("activate", (event) => {
       await Promise.all(
         keys.map((key) => {
           if (key !== STATIC_CACHE && key !== RUNTIME_CACHE) {
-            console.log("[SW] Borrando cache viejo:", key);
             return caches.delete(key);
           }
         })
       );
       await self.clients.claim();
-      console.log("[SW] Versión activa:", VERSION);
+      // console.log("[SW] Versión activa:", VERSION);
     })()
   );
 });
@@ -70,11 +71,17 @@ self.addEventListener("message", (event) => {
   }
 });
 
-// Estrategias de cache
+// Estrategias de cache (robusto)
 self.addEventListener("fetch", (event) => {
   const req = event.request;
+  const url = new URL(req.url);
 
-  // --- 1️⃣ HTML → Network First con fallback offline
+  // 0) Ignorar protocolos que no sean http/https (extensiones, data:, file:, etc.)
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    return; // no interceptar; el navegador lo maneja
+  }
+
+  // 1) HTML / navegaciones → Network First con fallback a cache y offline.html
   if (
     req.mode === "navigate" ||
     (req.method === "GET" && req.headers.get("accept")?.includes("text/html"))
@@ -86,16 +93,24 @@ self.addEventListener("fetch", (event) => {
           const cache = await caches.open(RUNTIME_CACHE);
           cache.put(req, networkRes.clone());
           return networkRes;
-        } catch {
+        } catch (err) {
           const cachedRes = await caches.match(req);
-          return cachedRes || (await caches.match("./offline.html"));
+          if (cachedRes) return cachedRes;
+          const offline = await caches.match("./offline.html");
+          return (
+            offline ||
+            new Response("<h1>Offline</h1>", {
+              status: 200,
+              headers: { "Content-Type": "text/html; charset=utf-8" }
+            })
+          );
         }
       })()
     );
     return;
   }
 
-  // --- 2️⃣ CSS, JS, imágenes → Cache First con fallback a red
+  // 2) Estáticos (css/js/img/font) → Cache First con relleno de runtime
   if (["style", "script", "image", "font"].includes(req.destination)) {
     event.respondWith(
       (async () => {
@@ -106,10 +121,12 @@ self.addEventListener("fetch", (event) => {
           const cache = await caches.open(RUNTIME_CACHE);
           cache.put(req, networkRes.clone());
           return networkRes;
-        } catch {
-          return cached; // si no hay, deja fallar
+        } catch (err) {
+          // Si no hay cache y falla red, devolver un Response válido
+          return new Response("", { status: 408, statusText: "Request Timeout (offline)" });
         }
       })()
     );
+    return;
   }
 });

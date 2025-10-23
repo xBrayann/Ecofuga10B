@@ -4,38 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EcoFuga | Sistema de Detección de Fugas y Tickets</title>
-  <link rel="stylesheet" href="styles.css" />
-  <meta name="description" content="EcoFuga: Reporta y gestiona fugas de agua con un sistema de tickets, panel de seguimiento y roles para clientes, administradores y técnicos.">
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0aa4ff">
-<!-- Favicon para navegadores -->
-<link rel="icon" href="icons/icon-72.png" type="image/png">
 
+  <!-- Estilos propios de la página -->
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Estilos del App Shell -->
+  <link rel="stylesheet" href="shell.css">
+
+  <meta name="description" content="EcoFuga: Reporta y gestiona fugas de agua con un sistema de tickets, panel de seguimiento y roles para clientes, administradores y técnicos.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0aa4ff">
+  <!-- Favicon para navegadores -->
+  <link rel="icon" href="icons/icon-72.png" type="image/png">
 </head>
 <body>
-  <!-- Encabezado -->
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="header-brand">
-        <!-- ========= LÍNEA PARA CAMBIAR SOLO LA RUTA DEL LOGO ========= -->
-        <img class="logo" src="logotipo.jpg" alt="Logo EcoFuga" />
-        <!-- ^ Cambia ÚNICAMENTE el valor de src para actualizar la imagen -->
-        <span class="brand">EcoFuga</span>
-      </div>
-
-      <nav class="header-actions" aria-label="Acciones principales">
-        <a class="btn btn-primary" href="auth.html">Ingresar</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <!-- HERO con logo grande en contenedor -->
+  
+  <div id="app-header"></div>
+  <!-- Contenido propio de la página -->
+  <main id="page-content">
     <section class="container hero" id="inicio">
       <div class="hero-grid">
         <div class="hero-media">
           <div class="hero-logo-card card">
-            <!-- Si deseas, puedes usar la MISMA imagen del header aquí también -->
             <img class="hero-logo" src="logotipo.jpg" alt="Logo EcoFuga">
             <p class="hero-logo-caption">EcoFuga</p>
           </div>
@@ -47,7 +36,6 @@
             EcoFuga centraliza el <strong>reporte de fugas</strong> y su <strong>seguimiento</strong> mediante un
             sistema de tickets que prioriza incidencias, asigna técnicos y acelera la atención.
           </p>
-          <!-- Se retiraron los botones del hero para evitar duplicados -->
           <ul class="hero-badges">
             <li class="badge">Tickets por prioridad</li>
             <li class="badge">Alertas en tiempo real</li>
@@ -76,7 +64,7 @@
       </div>
     </section>
 
-    <!-- CÓMO FUNCIONA (con botón "Ver qué ofrecemos" a un costado) -->
+    <!-- CÓMO FUNCIONA -->
     <section class="container" id="como-funciona" aria-labelledby="como-title">
       <div class="section-head">
         <h2 id="como-title">Cómo funciona</h2>
@@ -120,7 +108,7 @@
       </div>
     </section>
 
-    <!-- CTA final (sin botón para evitar duplicados) -->
+    <!-- CTA final -->
     <section class="container cta" aria-labelledby="cta-title">
       <h2 id="cta-title">¿Listo para gestionar fugas con eficiencia?</h2>
       <p>Accede al sistema desde el botón “Ingresar” en el encabezado.</p>
@@ -134,42 +122,38 @@
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
   </script>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      const reg = await navigator.serviceWorker.register('./sw.js', { scope: './' });
-      console.log("✅ Service Worker registrado correctamente:", reg.scope);
-
-      // Mostrar aviso si hay nueva versión
-      reg.addEventListener('updatefound', () => {
-        const nw = reg.installing;
-        nw?.addEventListener('statechange', () => {
-          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-            const banner = document.createElement('div');
-            banner.style.cssText =
-              "position:fixed;left:16px;right:16px;bottom:16px;padding:12px;border-radius:12px;background:#0aa4ff;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:9999;box-shadow:0 10px 20px rgba(0,0,0,.2)";
-            banner.innerHTML = "<span>Hay una actualización disponible.</span>";
-            const btn = document.createElement('button');
-            btn.textContent = "Actualizar";
-            btn.style.cssText =
-              "background:#00b894;color:#fff;border:none;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer";
-            btn.onclick = () => nw.postMessage({ type: 'SKIP_WAITING' });
-            banner.appendChild(btn);
-            document.body.appendChild(banner);
-            navigator.serviceWorker.addEventListener('controllerchange', () =>
-              location.reload()
-            );
-          }
+  <script src="shell.js"></script>
+  <!-- Service Worker -->
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', async () => {
+      try {
+        const reg = await navigator.serviceWorker.register('./sw.js', { scope: './' });
+        console.log("✅ Service Worker registrado correctamente:", reg.scope);
+        reg.addEventListener('updatefound', () => {
+          const nw = reg.installing;
+          nw?.addEventListener('statechange', () => {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              const banner = document.createElement('div');
+              banner.style.cssText =
+                "position:fixed;left:16px;right:16px;bottom:16px;padding:12px;border-radius:12px;background:#0aa4ff;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:9999;box-shadow:0 10px 20px rgba(0,0,0,.2)";
+              banner.innerHTML = "<span>Hay una actualización disponible.</span>";
+              const btn = document.createElement('button');
+              btn.textContent = "Actualizar";
+              btn.style.cssText =
+                "background:#00b894;color:#fff;border:none;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer";
+              btn.onclick = () => nw.postMessage({ type: 'SKIP_WAITING' });
+              banner.appendChild(btn);
+              document.body.appendChild(banner);
+              navigator.serviceWorker.addEventListener('controllerchange', () => location.reload());
+            }
+          });
         });
-      });
-    } catch (err) {
-      console.error("❌ Error al registrar el Service Worker:", err);
-    }
-  });
-}
-</script>
-
-
+      } catch (err) {
+        console.error("❌ Error al registrar el Service Worker:", err);
+      }
+    });
+  }
+  </script>
 </body>
 </html>

@@ -1,0 +1,35 @@
+
+:root{
+  --brand-blue:#0aa4ff;
+  --brand-green:#00b894;
+  --text:#163042;
+  --bg:#f6fbff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+a{text-decoration:none;color:inherit}
+
+.app-header{
+  position:sticky; top:0; z-index:1000;
+  background:linear-gradient(90deg, rgba(10,164,255,.95), rgba(0,184,148,.95));
+  color:#fff; padding:10px 16px; box-shadow:0 6px 20px rgba(0,0,0,.08);
+}
+.app-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1200px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:.3px}
+.brand img{width:28px;height:28px;border-radius:50%;background:#fff;object-fit:contain}
+
+.app-nav{display:flex;gap:10px;flex-wrap:wrap}
+.app-btn{
+  border:0;border-radius:999px;padding:8px 14px;font-weight:700;cursor:pointer;
+  background:#fff;color:#0b3d4a; box-shadow:0 6px 16px rgba(0,0,0,.12)
+}
+.app-btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.55)}
+
+main#page-content{max-width:1200px;margin:18px auto;padding:0 16px}
+
+#offline-banner{
+  display:none; position:fixed; top:0; left:0; right:0; z-index:1100;
+  padding:10px; text-align:center; font-weight:700; color:#fff;
+  background:linear-gradient(90deg, #ff6b6b, #ff9276);
+  box-shadow:0 6px 20px rgba(0,0,0,.12)
+}
